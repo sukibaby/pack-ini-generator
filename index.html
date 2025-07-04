@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pack.ini Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 200px;
+        }
+
+        .form-group {
+            margin-bottom: 10px;
+        }
+
+        label,
+        .checkbox-label {
+            display: inline-block;
+            margin-bottom: 5px;
+        }
+
+        .info {
+            display: inline;
+            cursor: pointer;
+            color: blue;
+            text-decoration: underline;
+        }
+
+        .info-text {
+            display: none;
+            margin-top: 5px;
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        .checkbox-container,
+        .label-container {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 5px;
+        }
+
+        input,
+        select {
+            display: block;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Pack.ini Generator</h1>
+    <form id="iniForm">
+
+        <div class="form-group">
+            <div class="label-container">
+                <label for="displayTitle">Display Title:</label>
+                <span class="info" onclick="toggleInfo('displayTitleInfo')">(?)</span>
+            </div>
+            <div id="displayTitleInfo" class="info-text"></div>
+            <input type="text" id="displayTitle" name="displayTitle" value>
+        </div>
+        <div class="form-group">
+            <label for="translitTitle">Translit Title:</label>
+            <span class="info" onclick="toggleInfo('translitTitleInfo')">(?)</span>
+            <div id="translitTitleInfo" class="info-text"></div>
+            <input type="text" id="translitTitle" name="translitTitle" value>
+        </div>
+        <div class="form-group">
+            <label for="sortTitle">Sort Title:</label>
+            <span class="info" onclick="toggleInfo('sortTitleInfo')">(?)</span>
+            <div id="sortTitleInfo" class="info-text"></div>
+            <input type="text" id="sortTitle" name="sortTitle" value>
+        </div>
+        <div class="form-group">
+            <label for="series">Series:</label>
+            <span class="info" onclick="toggleInfo('seriesInfo')">(?)</span>
+            <div id="seriesInfo" class="info-text"></div>
+            <input type="text" id="series" name="series" value>
+        </div>
+        <div class="form-group">
+            <label for="year">Year:</label>
+            <span class="info" onclick="toggleInfo('yearInfo')">(?)</span>
+            <div id="yearInfo" class="info-text"></div>
+            <input type="number" id="year" name="year" value="2025">
+        </div>
+        <div class="form-group">
+            <label for="banner">Banner:</label>
+            <span class="info" onclick="toggleInfo('bannerInfo')">(?)</span>
+            <div id="bannerInfo" class="info-text"></div>
+            <input type="text" id="banner" name="banner" value>
+        </div>
+        <div class="form-group">
+            <label for="syncOffset">Sync Offset:</label>
+            <span class="info" onclick="toggleInfo('syncOffsetInfo')">(?)</span>
+            <div id="syncOffsetInfo" class="info-text"></div>
+            <select id="syncOffset" name="syncOffset">
+                <option value="NULL">NULL</option>
+                <option value="ITG" selected>ITG</option>
+            </select>
+        </div>
+        <button type="button" onclick="generateINI()">Generate INI</button>
+    </form>
+    <h2>Generated INI File</h2>
+    <textarea id="output" readonly></textarea>
+
+    <script>
+        function generateINI() {
+            const form = document.getElementById('iniForm');
+            const output = document.getElementById('output');
+
+            // Formatting here looks wrong, but ensures the output is correctly structured
+            const iniContent = `[Group]
+Version=1
+DisplayTitle=${form.elements.displayTitle.value}
+TranslitTitle=${form.elements.translitTitle.value}
+SortTitle=${form.elements.sortTitle.value}
+Series=${form.elements.series.value}
+Year=${form.elements.year.value}
+Banner=${form.elements.banner.value}
+SyncOffset=${form.elements.syncOffset.value}`;
+
+            output.value = iniContent;
+        }
+
+        const infoTexts = {
+            displayTitleInfo: `This is how the pack's title will appear in the game.
+            This is typically the name of the pack as it will be displayed to users.
+            For example, "New Year's Stepfile Feast 2024/25".`,
+            translitTitleInfo: `This is the transliterated title of the pack.
+            If the title contains non-Latin characters, this field should provide a transliteration.
+            For example, if the pack title is 10首伟大的歌曲, a fitting transliterated title might be
+            "10 Great Songs".`,
+            sortTitleInfo: `This title is used for sorting the pack in lists. For example, this can
+            prevent the 10th pack from being sorted between the 1st and 2nd pack in a list.
+            It can also help sort series which are not in numerical order. The value here is not
+            shown to the user in game, but is used internally for sorting purposes.`,
+            seriesInfo: `The series to which this pack belongs. For example, if the pack name is "New Year's
+            Stepfile Feast 2024/25", this value would be "New Year's Stepfile Feast".`,
+            yearInfo: `The year associated with the pack. Typically this is the year the pack was released.`,
+            bannerInfo: `The banner image file for the pack. Typically, this is a PNG that resides in the
+            same directory as the pack's INI file. Frequently, this is 836x328 pixels in size, or an aspect
+            ratio of 2.55:1, when using a theme like Simply Love.`,
+            syncOffsetInfo: `The sync offset for the pack. Frequently, packs for ITG (In The Groove) have
+            had 9ms added to the offset. If you added 9ms to the offset, or this is an older ITG pack,
+            you should select "ITG". If you did not add 9ms to the offset after syncing the file, you should
+            select "NULL".`
+        };
+
+        function toggleVersionInput() {
+            const versionGroup = document.getElementById('versionGroup');
+            const showVersion = document.getElementById('showVersion');
+            versionGroup.style.display = showVersion.checked ? 'block' : 'none';
+        }
+
+        function toggleInfo(id) {
+            const infoText = document.getElementById(id);
+            infoText.style.display = infoText.style.display === 'none' ? 'block' : 'none';
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            for (const [id, text] of Object.entries(infoTexts)) {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.textContent = text;
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
+
+<!-- MIT License
+
+Copyright (c) 2025 sukibaby
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-->
