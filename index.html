@@ -191,8 +191,9 @@
                 `SyncOffset=${form.elements.syncOffset.value}`
             ];
 
-            if (selectedVersion === '2' && seriesBannerValue) {
-                lines.splice(lines.length - 1, 0, `SeriesBanner=${seriesBannerValue}`);
+            if (selectedVersion === '2') {
+                const seriesBannerLine = `SeriesBanner=${seriesBannerValue}`;
+                lines.splice(lines.length - 1, 0, seriesBannerLine);
             }
 
             const iniContent = lines.join('\n');
