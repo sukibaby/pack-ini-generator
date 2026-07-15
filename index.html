@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pack.ini Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 200px;
+        }
+
+        .form-group {
+            margin-bottom: 10px;
+        }
+
+        label,
+        .checkbox-label {
+            display: inline-block;
+            margin-bottom: 5px;
+        }
+
+        .info-group {
+            display: inline-flex;
+            align-items: center;
+            margin-left: 6px;
+        }
+
+        .info {
+            display: inline-block;
+            cursor: pointer;
+            color: blue;
+            text-decoration: underline;
+            font-size: 0.9em;
+        }
+
+        .info-text {
+            margin-top: 6px;
+            font-size: 0.9em;
+            color: #555;
+            line-height: 1.4;
+        }
+
+        .checkbox-container,
+        .label-container,
+        .radio-group {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 5px;
+        }
+
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        input,
+        select {
+            display: block;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Pack.ini Generator v2</h1>
+    
+    <form id="iniForm">
+
+        <div class="form-group">
+            <div class="label-container">
+                <label for="displayTitle">Display Title:</label>
+                <details class="info-group">
+                    <summary class="info">(?)</summary>
+                    <div id="displayTitleInfo" class="info-text"></div>
+                </details>
+            </div>
+            <input type="text" id="displayTitle" name="displayTitle" value>
+        </div>
+        <div class="form-group">
+            <div class="label-container">
+                <label for="translitTitle">Transliterated Title:</label>
+                <details class="info-group">
+                    <summary class="info">(?)</summary>
+                    <div id="translitTitleInfo" class="info-text"></div>
+                </details>
+            </div>
+            <input type="text" id="translitTitle" name="translitTitle" value>
+        </div>
+        <div class="form-group">
+            <div class="label-container">
+                <label for="sortTitle">Sort Title:</label>
+                <details class="info-group">
+                    <summary class="info">(?)</summary>
+                    <div id="sortTitleInfo" class="info-text"></div>
+                </details>
+            </div>
+            <input type="text" id="sortTitle" name="sortTitle" value>
+        </div>
+        <div class="form-group">
+            <div class="label-container">
+                <label for="series">Series:</label>
+                <details class="info-group">
+                    <summary class="info">(?)</summary>
+                    <div id="seriesInfo" class="info-text"></div>
+                </details>
+            </div>
+            <input type="text" id="series" name="series" value>
+        </div>
+        <div class="form-group">
+            <div class="label-container">
+                <label for="seriesBanner">Series Banner:</label>
+                <details class="info-group">
+                    <summary class="info">(?)</summary>
+                    <div id="seriesBannerInfo" class="info-text"></div>
+                </details>
+            </div>
+            <input type="text" id="seriesBanner" name="seriesBanner" value>
+        </div>
+        <div class="form-group">
+            <div class="label-container">
+                <label for="year">Year:</label>
+                <details class="info-group">
+                    <summary class="info">(?)</summary>
+                    <div id="yearInfo" class="info-text"></div>
+                </details>
+            </div>
+            <input type="number" id="year" name="year" value="">
+        </div>
+        <div class="form-group">
+            <div class="label-container">
+                <label for="banner">Banner:</label>
+                <details class="info-group">
+                    <summary class="info">(?)</summary>
+                    <div id="bannerInfo" class="info-text"></div>
+                </details>
+            </div>
+            <input type="text" id="banner" name="banner" value>
+        </div>
+        <div class="form-group">
+            <div class="label-container">
+                <label for="syncOffset">Sync Offset:</label>
+                <details class="info-group">
+                    <summary class="info">(?)</summary>
+                    <div id="syncOffsetInfo" class="info-text"></div>
+                </details>
+            </div>
+            <select id="syncOffset" name="syncOffset">
+                <option value="NULL">NULL</option>
+                <option value="ITG" selected>ITG</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Pack.ini Version:</label>
+            <div class="radio-group">
+                <label><input type="radio" name="packVersion" value="1"> v1</label>
+                <label><input type="radio" name="packVersion" value="2" checked> v2</label>
+            </div>
+            Note: v1 is supported by ITGmania 1.0.0/Simply Love 5.6.0 or higher. v2 is supported by ITGmania 1.3.0/Simply Love 5.9.0 or higher.
+        </div>
+        <button type="button" onclick="generateINI()">Generate INI</button>
+    </form>
+    <h2>Generated INI File</h2>
+    <textarea id="output" readonly></textarea>
+
+    <script>
+        function generateINI() {
+            const form = document.getElementById('iniForm');
+            const output = document.getElementById('output');
+
+            const selectedVersion = form.elements.packVersion.value;
+            const seriesBannerValue = form.elements.seriesBanner.value.trim();
+
+            const lines = [
+                `[Group]`,
+                `Version=${selectedVersion}`,
+                `DisplayTitle=${form.elements.displayTitle.value}`,
+                `TranslitTitle=${form.elements.translitTitle.value}`,
+                `SortTitle=${form.elements.sortTitle.value}`,
+                `Series=${form.elements.series.value}`,
+                `Year=${form.elements.year.value}`,
+                `Banner=${form.elements.banner.value}`,
+                `SyncOffset=${form.elements.syncOffset.value}`
+            ];
+
+            if (selectedVersion === '2' && seriesBannerValue) {
+                lines.splice(lines.length - 1, 0, `SeriesBanner=${seriesBannerValue}`);
+            }
+
+            const iniContent = lines.join('\n');
+            output.value = iniContent;
+        }
+
+        const infoTexts = {
+            displayTitleInfo: `This is how the pack's title will appear in the game.
+            This is typically the name of the pack as it will be displayed to users.
+            For example, "New Year's Stepfile Feast 2024/25".`,
+            translitTitleInfo: `This is the transliterated or translated title of the pack.
+            If the title contains non-Latin characters, this field should provide a transliteration.
+            For example, if the pack title is 10首伟大的歌曲, a fitting translated title might be
+            "10 Great Songs". A fitting transliterated title might be "10 Shou weida de gequ".`,
+            sortTitleInfo: `This title is used for sorting the pack in lists. For example, this can
+            prevent the 10th pack from being sorted between the 1st and 2nd pack in a list.
+            It can also help sort series which are not in numerical order. The value here is not
+            shown to the user in game, but is used internally for sorting purposes.`,
+            seriesInfo: `The series to which this pack belongs. For example, if the pack name is "New Year's
+            Stepfile Feast 2024/25", this value would be "New Year's Stepfile Feast".`,
+            seriesBannerInfo: `Can be used to set a common banner for the entire series. Supported in Pack.ini v2 and higher`,
+            yearInfo: `The year associated with the pack. Typically this is the year the pack was released.`,
+            bannerInfo: `The banner image file for the pack. Typically, this is a PNG that resides in the
+            same directory as the pack's INI file. Frequently, this is 836x328 pixels in size, or an aspect
+            ratio of 2.55:1, when using a theme like Simply Love.`,
+            syncOffsetInfo: `The sync offset for the pack. Frequently, packs for ITG (In The Groove) have
+            had 9ms added to the offset. If you added 9ms to the offset, or this is an older ITG pack,
+            you should select "ITG". If you did not add 9ms to the offset after syncing the file, you should
+            select "NULL".`
+        };
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const yearInput = document.getElementById('year');
+            if (yearInput && !yearInput.value) {
+                yearInput.value = new Date().getFullYear();
+            }
+
+            for (const [id, text] of Object.entries(infoTexts)) {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.textContent = text;
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
