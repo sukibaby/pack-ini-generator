@@ -224,28 +224,14 @@
         }
 
         const infoTexts = {
-            displayTitleInfo: `This is how the pack's title will appear in the game.
-            This is typically the name of the pack as it will be displayed to users.
-            For example, "New Year's Stepfile Feast 2024/25".`,
-            translitTitleInfo: `This is the transliterated or translated title of the pack.
-            If the title contains non-Latin characters, this field should provide a transliteration.
-            For example, if the pack title is 10首伟大的歌曲, a fitting translated title might be
-            "10 Great Songs". A fitting transliterated title might be "10 Shou weida de gequ".`,
-            sortTitleInfo: `This title is used for sorting the pack in lists. For example, this can
-            prevent the 10th pack from being sorted between the 1st and 2nd pack in a list.
-            It can also help sort series which are not in numerical order. The value here is not
-            shown to the user in game, but is used internally for sorting purposes.`,
-            seriesInfo: `The series to which this pack belongs. For example, if the pack name is "New Year's
-            Stepfile Feast 2024/25", this value would be "New Year's Stepfile Feast".`,
+            displayTitleInfo: `This is how the pack's title will appear in the game. This is typically the name of the pack as it will be displayed to users. For example, "New Year's Stepfile Feast 2024/25".`,
+            translitTitleInfo: `If the title contains non-Latin characters, this field can provide a transliteration. For example, if the pack title is 10首伟大的歌曲, a fitting transliterated title might be "10 Shou weida de gequ". Another example is the song "Ö<3rf10₩", which has a transliterated title of "Ov3rf10W".`,
+            sortTitleInfo: `This title is used for sorting the pack in lists. For example, this can prevent the 10th pack from being sorted between the 1st and 2nd pack in a list. The contents of this field are not visible to the user from the game.`,
+            seriesInfo: `The series to which this pack belongs. For example, if the pack name is "New Year's Stepfile Feast 2024/25", this value would be "New Year's Stepfile Feast". Note: Simply Love 5.9.0 is the first version to support sorting by series.`,
             seriesBannerInfo: `Can be used to set a common banner for the entire series. Supported in Pack.ini v2 and higher`,
             yearInfo: `The year associated with the pack. Typically this is the year the pack was released.`,
-            bannerInfo: `The banner image file for the pack. Typically, this is a PNG that resides in the
-            same directory as the pack's INI file. Frequently, this is 836x328 pixels in size, or an aspect
-            ratio of 2.55:1, when using a theme like Simply Love.`,
-            syncOffsetInfo: `The sync offset for the pack. Frequently, packs for ITG (In The Groove) have
-            had 9ms added to the offset. If you added 9ms to the offset, or this is an older ITG pack,
-            you should select "ITG". If you did not add 9ms to the offset after syncing the file, you should
-            select "NULL".`
+            bannerInfo: `The banner image file for the pack. Can be PNG, JPG, GIF or BMP. Should have an aspect ratio of 2.55:1. 836x328 pixels is a common dimension when using a theme like Simply Love.`,
+            syncOffsetInfo: `The sync offset for the pack. Frequently, packs for ITG (In The Groove) have had 9ms added to the offset. If you added 9ms to the offset, or this is an older ITG pack, you should select "ITG". If you did not add 9ms to the offset after syncing the file, you should select "NULL".`
         };
 
         document.addEventListener("DOMContentLoaded", () => {
